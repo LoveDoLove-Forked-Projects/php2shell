@@ -293,15 +293,15 @@ docs/
   upstream-changes.md          manual record of the runtime changes
   licensing.md                 MIT and upstream licensing notes
   instrumentation/             /proc oracle and gdb recipes
-  es/                          Spanish translations
+  es/                          Spanish originals
 ```
 
 ## Laboratories and calibration
 
 ```sh
-make labs-up          # 7.4.33 ... 8.5.11 on :8100-:8106
-make labs-test        # run the dispatcher against each lab
-make labs-down
+python3 tools/php2shell_labs.py up      # 7.4.33 ... 8.5.11 on :8100-:8106
+python3 tools/php2shell_labs.py test    # run the dispatcher against each lab
+python3 tools/php2shell_labs.py down
 ```
 
 Every lab binds to `127.0.0.1`, runs one worker with the calibration
@@ -440,6 +440,14 @@ python3 -m unittest discover -s tests -v
 
 ## Credits
 
+- **Wiz Research** — discovery and public analysis of PHP2Shell
+  (CVE-2026-109618 / CVE-2026-109619):
+  [blog](https://www.wiz.io/blog/php2shell-php-rce) and
+  [technical video](https://youtu.be/H7JWNiQpaT8). The analysis in this
+  repository starts from that publication.
+- **Calif** — parallel research and the upload-metadata amplification analysis
+  referenced in [docs/php2shell-analysis.md](docs/php2shell-analysis.md):
+  [calif.io/php2shell](https://calif.io/php2shell/).
 - **9bie** — original public PHP2Shell exploit and heap-grooming research:
   stage-1/2 leaks, the stage-3 fake HashTable carrier and the
   [php2shell-bypass-aslr-exp](https://github.com/9bie/php2shell-bypass-aslr-exp)
@@ -452,9 +460,10 @@ python3 -m unittest discover -s tests -v
 - **WoYinDao** — public CVE-2026-109618 analysis: session lifecycle, the
   pre-RINIT OOM window, the `var_destroy` reentry UAF and the cross-branch
   negative matrix.
-- **PHP security team and release maintainers** — advisory, fixes in 8.4.27,
-  8.5.12 and the branch releases, and the security release notes at
-  [php.net/security](https://www.php.net/security/).
+- **PHP security team, PHP Foundation and release maintainers** — advisory,
+  fixes in 8.4.27, 8.5.12 and the branch releases, and the security release
+  notes at [php.net/security](https://www.php.net/security/), with the
+  [PHP Foundation note](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/).
 - **devploit** — version-aware dispatcher, profile factory, laboratories,
   instrumentation, tests and documentation.
 
