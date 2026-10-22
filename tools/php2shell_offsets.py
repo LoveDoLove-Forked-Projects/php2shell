@@ -125,6 +125,15 @@ def image_env(image: str) -> dict:
 
 
 def image_arch(image: str) -> str:
+    # Some imported/emulated images report an empty Architecture, so ask the
+    # image itself. uname inside the container is authoritative.
+    out = docker("run", "--rm", "--entrypoint", "uname", image, "-m", timeout=120)
+    machine = out.stdout.strip().lower()
+    if machine:
+        mapped = {"aarch64": "arm64", "arm64": "arm64",
+                  "x86_64": "amd64", "amd64": "amd64"}.get(machine)
+        if mapped:
+            return mapped
     out = docker("inspect", "--format", "{{.Architecture}}", image)
     arch = out.stdout.strip()
     if not arch or arch == "unknown":
