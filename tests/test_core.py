@@ -191,6 +191,16 @@ class PathAndUiTests(unittest.TestCase):
         self.assertEqual(len(pins.socks), 2)
         pins.close()
 
+    def test_result_box_is_closed(self):
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            ui.UI(color=False).result(False, "ARCH REQUIRED", "remote target without --arch/--profile")
+        lines = [line for line in buffer.getvalue().splitlines() if line]
+        self.assertTrue(lines)
+        self.assertTrue(all(len(line) == 68 for line in lines), [len(line) for line in lines])
+        self.assertTrue(lines[0].startswith("╭"))
+        self.assertTrue(lines[-1].startswith("╰"))
+
     def test_banner_branding(self):
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):

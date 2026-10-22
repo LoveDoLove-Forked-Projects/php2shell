@@ -85,12 +85,13 @@ class UI:
 
     # -- result -------------------------------------------------------------
     def result(self, success: bool, title: str, detail: str = "") -> None:
-        width = 66
+        width = 68
+        inner = width - 4
         color = GREEN if success else RED
         print()
-        print(self.c(color, "╭─ RESULT " + "─" * (width - 9) + "╮"))
-        print(self.c(color, "│ ") + self.c(color + BOLD, title.ljust(width - 2)) + self.c(color, " │"))
+        print(self.c(color, "╭─ RESULT " + "─" * (width - 11) + "╮"))
+        print(self.c(color, "│ ") + self.c(color + BOLD, title[:inner].ljust(inner)) + self.c(color, " │"))
         if detail:
             for line in detail.splitlines()[:4]:
-                print(self.c(color, "│ ") + line[:width - 2].ljust(width - 2) + self.c(color, " │"))
+                print(self.c(color, "│ ") + line[:inner].ljust(inner) + self.c(color, " │"))
         print(self.c(color, "╰" + "─" * (width - 2) + "╯"))
