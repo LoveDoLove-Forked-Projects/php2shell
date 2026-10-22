@@ -22,7 +22,7 @@ refused by the dispatcher.
 """
 
 from __future__ import annotations
-from php2shell_paths import default_repo_dir
+from php2shell_paths import default_repo_dir, prepare_lab_out
 
 import argparse
 import os
@@ -69,13 +69,12 @@ def wait_http(url: str, timeout: float = 40.0) -> bool:
 
 
 def up(only=None):
-    os.makedirs(OUT, exist_ok=True)
+    prepare_lab_out(OUT)
     for version, image, port in BUILDS:
         if only and version not in only:
             continue
         name = name_for(version)
-        outdir = os.path.join(OUT, version)
-        os.makedirs(outdir, exist_ok=True)
+        outdir = prepare_lab_out(os.path.join(OUT, version))
         docker("rm", "-f", name)
         print(f"[*] {version}: starting {image} on :{port}", flush=True)
         result = docker("run", "-d", "--name", name,

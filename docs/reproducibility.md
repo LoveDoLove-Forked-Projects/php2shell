@@ -132,6 +132,7 @@ profile that only leaks is stored with `rce: false`.
 | `TLSV1_ALERT_INTERNAL_ERROR` | HTTPS sends SNI; the chain's HTTPS transport is still experimental |
 | HTTPS stage 1 fails | use HTTP for the verified path; HTTPS is not end-to-end verified |
 | `no proof yet` | `/out` mount, writable webroot, served output path |
+| proof missing on a local lab | container user cannot write `/out`; use `chmod 777 <out-dir>` |
 | stage 1 fails on a multi-worker target | `--pin-workers N` (remote pinning is opt-in) |
 | `ARCH REQUIRED` on a remote target | pass `--arch aarch64|amd64` or `--profile NAME`; HTTP cannot reveal the CPU |
 | probe inconclusive | `--memory-limit-mb N` or `--no-probe` |

@@ -217,6 +217,12 @@ class PathAndUiTests(unittest.TestCase):
         self.assertTrue(lines[0].startswith("╭"))
         self.assertTrue(lines[-1].startswith("╰"))
 
+    def test_prepare_lab_out_mode(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "out")
+            paths.prepare_lab_out(path)
+            self.assertEqual(os.stat(path).st_mode & 0o777, 0o777)
+
     def test_banner_branding(self):
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):

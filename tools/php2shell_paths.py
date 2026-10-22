@@ -11,6 +11,17 @@ VENDOR = ROOT / "vendor" / "php2shell-upstream"
 FALLBACK = Path("/tmp/php2shell-rce")
 
 
+def prepare_lab_out(path: str | Path) -> str:
+    """Create a lab output directory the container user can write to."""
+    target = Path(path)
+    target.mkdir(parents=True, exist_ok=True)
+    try:
+        target.chmod(0o777)
+    except OSError:
+        pass
+    return str(target)
+
+
 def default_repo_dir() -> str:
     """Prefer the bootstrapped checkout, then the historical /tmp clone."""
     env = os.environ.get("P2S_REPO_DIR")

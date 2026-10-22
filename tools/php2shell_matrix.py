@@ -18,7 +18,7 @@ Authorized testing only.
 """
 
 from __future__ import annotations
-from php2shell_paths import default_repo_dir
+from php2shell_paths import default_repo_dir, prepare_lab_out
 
 import argparse
 import json
@@ -77,8 +77,7 @@ def wait_http(url: str, timeout: float = 30.0) -> bool:
 def run_build(build, args) -> dict:
     label = f"{build['key']}-bookworm-{arch_label()}"
     name = f"p2s-matrix-{build['key'].replace('.', '')}"
-    outdir = os.path.join(LAB, "out", build["key"])
-    os.makedirs(outdir, exist_ok=True)
+    outdir = prepare_lab_out(os.path.join(LAB, "out", build["key"]))
     proof = os.path.join(outdir, "p1")
 
     print(f"\n=== {label} ({build['image']}) ===", flush=True)

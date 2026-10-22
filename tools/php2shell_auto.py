@@ -716,6 +716,13 @@ def main() -> int:
         patch_tls(args.repo_dir)
 
     outdir = local_out_dir(args)
+    if outdir:
+        try:
+            mode = os.stat(outdir).st_mode & 0o777
+            if not (mode & 0o002):
+                ui.warn(f"{outdir} is not world-writable; run chmod 777 if the proof is missing")
+        except OSError:
+            pass
     if (args.script or args.interactive) and not outdir:
         ui.crit("--script/--interactive need a local /out mount")
         ui.result(False, "NO OUTPUT CHANNEL", "use a local lab or a web-accessible output path")
