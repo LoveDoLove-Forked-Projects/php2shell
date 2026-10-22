@@ -99,7 +99,7 @@
   ],
   "profiles": {
     "8.4.26": {
-      "file": "profiles/8.4.26-bookworm-amd64.json",
+      "file": "profiles/8.4.26-bookworm.json",
       "build": "php:8.4.26-apache (Debian bookworm, mod_php, prefork)",
       "rce": true,
       "verified": true

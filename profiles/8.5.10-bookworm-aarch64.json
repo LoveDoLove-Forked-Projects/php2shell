@@ -56,5 +56,6 @@
     "libphp_base": "0xffffb9200000"
   },
   "status": "RCE verified",
-  "oom_mb": 12
+  "oom_mb": 12,
+  "arch": "aarch64"
 }

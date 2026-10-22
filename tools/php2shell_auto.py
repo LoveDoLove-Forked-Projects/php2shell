@@ -140,6 +140,17 @@ def is_loopback(host: str) -> bool:
     return True
 
 
+def detect_arch(container: str) -> str | None:
+    """Read the architecture of a local container."""
+    try:
+        result = subprocess.run(["docker", "exec", container, "uname", "-m"],
+                                capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return {"aarch64": "aarch64", "arm64": "aarch64",
+            "x86_64": "amd64", "amd64": "amd64"}.get(result.stdout.strip().lower())
+
+
 def container_for_port(port: int) -> str | None:
     """Find the local container publishing 127.0.0.1:<port>."""
     try:
@@ -169,11 +180,13 @@ def load_profiles(directory: str):
     return profiles
 
 
-def select(profiles, version: str, branch: str):
-    exact = [p for p in profiles if p.get("php_version") == version]
+def select(profiles, version: str, branch: str, arch: str | None = None):
+    def fits(profile):
+        return arch is None or profile.get("arch") == arch
+    exact = [p for p in profiles if p.get("php_version") == version and fits(p)]
     if exact:
         return exact[0], "exact"
-    same_branch = [p for p in profiles if p.get("branch") == branch]
+    same_branch = [p for p in profiles if p.get("branch") == branch and fits(p)]
     if same_branch:
         return same_branch[0], "branch-only"
     return None, "none"
@@ -530,6 +543,8 @@ def main() -> int:
                     help="disable worker pinning")
     ap.add_argument("--pin-max", type=int, default=32,
                     help="max keep-alive connections for remote auto-pinning")
+    ap.add_argument("--arch", choices=("aarch64", "amd64"), default=None,
+                    help="select the CPU architecture; auto-detected for local containers")
     ap.add_argument("--profile", default=None,
                     help="force a profile by name/path substring (needed when a version has several builds)")
     ap.add_argument("--no-color", action="store_true")
@@ -566,7 +581,6 @@ def main() -> int:
         detected = container_for_port(port)
         if detected:
             args.container = detected
-
     args.command = args.command or ("id>p1" if remote else "id>/out/p1")
     args.fetch = resolve_fetch(args, args.command)
     proof = resolve_proof(args, args.fetch)
@@ -575,6 +589,11 @@ def main() -> int:
     ui.banner()
     ui.chain("01/01", "automatic target detection / fixed command proof")
     ui.stage("DISCOVER", args.target)
+    if args.arch is None and not remote:
+        detected_arch = detect_arch(args.container)
+        if detected_arch:
+            args.arch = detected_arch
+            ui.info(f"detected architecture: {detected_arch}")
 
     version, server, powered = fingerprint(args.target)
     if args.php_version:
@@ -614,7 +633,15 @@ def main() -> int:
             ui.crit(f"no profile matches --profile {args.profile!r}")
             return 3
     else:
-        profile, how = select(profiles, version, branch)
+        exact = [p for p in profiles
+                 if p.get("php_version") == version
+                 and (args.arch is None or p.get("arch") == args.arch)]
+        if len(exact) > 1:
+            names = ", ".join(p.get("name", "?") for p in exact)
+            ui.crit(f"multiple builds for PHP {version}: {names}")
+            ui.info("pass --arch aarch64|amd64 or --profile NAME")
+            return 3
+        profile, how = select(profiles, version, branch, args.arch)
     if profile is None:
         entry = next((b for b in catalog.get("branches", []) if b.get("branch") == branch), None)
         if entry:

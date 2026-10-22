@@ -13,5 +13,5 @@ wrote /tmp/p2s-pocs/9bie_php2shell/out/offsets.env
     stage3 0x6e0d8/lab: no proof
     stage3 0x5404a/bookworm: no proof
     stage3 0x5404a/lab: no proof
-[*] wrote profiles/8.3.35-bookworm-aarch64.json
+[*] wrote /Users/dpua/Downloads/php-vuln/profiles/8.3.35-bookworm-aarch64.json
 [*] rce=False chunk=0xffff84600000 libphp=0xffff866f0000

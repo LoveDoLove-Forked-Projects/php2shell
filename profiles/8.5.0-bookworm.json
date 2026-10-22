@@ -32,6 +32,5 @@
     "libphp_base": "0xffff8d600000"
   },
   "status": "leaks calibrated; stage 3 not verified",
-  "distro": "debian",
   "arch": "aarch64"
 }

@@ -62,7 +62,8 @@ default retries because its stage 3 is probabilistic.
 - **Version-aware dispatch** — fingerprints the target, rejects fixed releases,
   selects the exact build profile and passes offsets, `htdata` and heap
   parameters explicitly. `--php-version` covers servers that hide their version;
-  `--profile` selects a specific build when a version has several (arm64/amd64).
+  `--arch` selects aarch64 or amd64 (auto-detected for local containers), and
+  `--profile` forces an exact build.
 - **Memory-limit probe** — one request reveals the target `memory_limit` from
   the fatal message; the chain then runs once instead of sweeping every value.
 - **Worker pinning** — keeps N-1 prefork workers busy with idle keep-alive
@@ -168,6 +169,17 @@ A profile is per build:
   "rce": true
 }
 ```
+
+## Architecture selection
+
+Some versions ship more than one build. PHP 8.5.11 has separate arm64 and amd64
+offsets:
+
+- local container: the dispatcher reads `uname -m` and selects the matching
+  profile automatically;
+- remote target: pass `--arch aarch64|amd64` (or `--profile NAME`). If the
+  version has several builds and no architecture is supplied, the dispatcher
+  refuses instead of guessing.
 
 ## Configuration requirements
 

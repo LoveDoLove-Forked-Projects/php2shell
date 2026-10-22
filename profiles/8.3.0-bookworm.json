@@ -32,6 +32,5 @@
     "libphp_base": null
   },
   "status": "calibration failed: heap/libphp leak not reproduced",
-  "distro": "debian",
   "arch": "aarch64"
 }

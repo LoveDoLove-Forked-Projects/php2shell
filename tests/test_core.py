@@ -60,6 +60,16 @@ class SelectionTests(unittest.TestCase):
     def test_none(self):
         self.assertEqual(auto.select([], "8.4.26", "8.4"), (None, "none"))
 
+    def test_select_by_arch(self):
+        profiles = [
+            {"name": "p-arm", "php_version": "8.5.11", "branch": "8.5", "arch": "aarch64"},
+            {"name": "p-amd", "php_version": "8.5.11", "branch": "8.5", "arch": "amd64"},
+        ]
+        profile, how = auto.select(profiles, "8.5.11", "8.5", "amd64")
+        self.assertEqual((profile["name"], how), ("p-amd", "exact"))
+        profile, how = auto.select(profiles, "8.5.11", "8.5", "aarch64")
+        self.assertEqual((profile["name"], how), ("p-arm", "exact"))
+
 
 class CommandTests(unittest.TestCase):
     def test_output_path(self):
@@ -127,6 +137,7 @@ class InventoryTests(unittest.TestCase):
             self.assertIn("name", data, path)
             self.assertIn("php_version", data, path)
             self.assertIn("branch", data, path)
+            self.assertIn(data.get("arch"), ("aarch64", "amd64"), path)
             self.assertIn("libphp", data, path)
             self.assertIn("stages", data, path)
             self.assertNotIn(data["name"], names, f"duplicate profile name: {path}")
