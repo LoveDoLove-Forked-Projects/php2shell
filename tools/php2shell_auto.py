@@ -345,6 +345,7 @@ class WorkerPins:
         path = u.path or "/"
         pins = []
         for _ in range(max_pins):
+            s = None
             try:
                 s = socket.create_connection((host, port), timeout=3)
                 if u.scheme == "https":
@@ -355,12 +356,18 @@ class WorkerPins:
                 s.settimeout(2)
                 data = s.recv(65536)
             except socket.timeout:
-                try:
-                    s.close()
-                except OSError:
-                    pass
+                if s is not None:
+                    try:
+                        s.close()
+                    except OSError:
+                        pass
                 break
             except OSError:
+                if s is not None:
+                    try:
+                        s.close()
+                    except OSError:
+                        pass
                 break
             if not data:
                 try:

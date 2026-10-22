@@ -301,6 +301,16 @@ def calibrate_stage3(mod, ex, chunk, lib, zif, proof, hints):
     return False, None
 
 
+def container_arch(container: str) -> str | None:
+    try:
+        result = subprocess.run(["docker", "exec", container, "uname", "-m"],
+                                capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return {"aarch64": "aarch64", "arm64": "aarch64",
+            "x86_64": "amd64", "amd64": "amd64"}.get(result.stdout.strip().lower())
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Calibrate one PHP2Shell build profile.")
     ap.add_argument("--target", required=True)
@@ -315,7 +325,18 @@ def main() -> int:
     ap.add_argument("--stage3-htdata", type=lambda x: int(x, 0))
     ap.add_argument("--stage3-pads", choices=("bookworm", "lab"))
     ap.add_argument("--distro", default="unknown")
+    ap.add_argument("--arch", choices=("aarch64", "amd64"), default=None)
     args = ap.parse_args()
+
+    arch = args.arch or container_arch(args.container)
+    if arch is None:
+        for candidate in ("amd64", "aarch64"):
+            if candidate in args.distro:
+                arch = candidate
+                break
+    if arch is None:
+        print("[!] cannot determine target architecture; pass --arch", file=sys.stderr)
+        return 3
 
     patch_params(args.repo_dir)
     if args.target.startswith("https://"):
@@ -354,6 +375,8 @@ def main() -> int:
         "branch": branch,
         "fixed_in": f"{branch}.{fixed}" if fixed else None,
         "sapi": "apache2handler",
+        "arch": arch,
+        "distro": "debian" if "bookworm" in args.distro else args.distro,
         "verified": rce,
         "rce": rce,
         "oom_mb": 12,

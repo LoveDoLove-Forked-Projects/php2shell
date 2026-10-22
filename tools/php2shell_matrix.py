@@ -47,11 +47,19 @@ BUILDS = [
 
 def arch_label() -> str:
     machine = platform.machine().lower()
-    return {"arm64": "aarch64", "x86_64": "x86_64", "amd64": "x86_64"}.get(machine, machine)
+    return {"arm64": "aarch64", "x86_64": "amd64", "amd64": "amd64"}.get(machine, machine)
 
 
 def docker(*args, capture=True, timeout=600):
     return subprocess.run(["docker", *args], capture_output=capture, text=True, timeout=timeout)
+
+
+def container_arch(name: str) -> str | None:
+    result = docker("exec", name, "uname", "-m")
+    if result.returncode != 0:
+        return None
+    return {"aarch64": "aarch64", "arm64": "aarch64",
+            "x86_64": "amd64", "amd64": "amd64"}.get(result.stdout.strip().lower())
 
 
 def wait_http(url: str, timeout: float = 30.0) -> bool:
@@ -93,11 +101,16 @@ def run_build(build, args) -> dict:
         docker("rm", "-f", name)
         return {"label": label, "status": "no-http"}
 
+    actual_arch = container_arch(name) or arch_label()
+    label = f"{build['key']}-bookworm-{actual_arch}"
+    print(f"[*] architecture: {actual_arch}", flush=True)
+
     cmd = [sys.executable, os.path.join(HERE, "php2shell_calibrate.py"),
            "--target", url, "--container", name,
            "--repo-dir", args.repo_dir,
            "--proof-file", proof,
-           "--distro", f"bookworm-{arch_label()}",
+           "--distro", f"bookworm-{actual_arch}",
+           "--arch", actual_arch,
            "--out-dir", PROFILES]
     if not args.full_search:
         cmd += ["--stage2-t", "406"]

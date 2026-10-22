@@ -22,6 +22,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import php2shell_auto as auto  # noqa: E402
 import php2shell_ui as ui  # noqa: E402
 import php2shell_paths as paths  # noqa: E402
+import php2shell_calibrate as cal  # noqa: E402
 
 
 class ClassificationTests(unittest.TestCase):
@@ -59,6 +60,15 @@ class SelectionTests(unittest.TestCase):
 
     def test_none(self):
         self.assertEqual(auto.select([], "8.4.26", "8.4"), (None, "none"))
+
+    def test_auto_remote_connection_timeout_is_safe(self):
+        with mock.patch.object(auto.socket, "create_connection", side_effect=socket.timeout):
+            self.assertIsNone(auto.WorkerPins.auto_remote("http://127.0.0.1:1", max_pins=1))
+
+    def test_container_arch_mapping(self):
+        result = SimpleNamespace(returncode=0, stdout="x86_64\n", stderr="")
+        with mock.patch.object(cal.subprocess, "run", return_value=result):
+            self.assertEqual(cal.container_arch("x"), "amd64")
 
     def test_remote_arch_required(self):
         self.assertTrue(auto.remote_arch_required(True, None, None))
@@ -159,6 +169,7 @@ class InventoryTests(unittest.TestCase):
             data = json.loads(schema.read_text())
             self.assertIn("$schema", data)
             self.assertEqual(data.get("type"), "object")
+            self.assertIn("arch", data.get("required", []))
 
     def test_catalog_structure(self):
         catalog = json.loads((ROOT / "catalog" / "vulnerable.json").read_text())

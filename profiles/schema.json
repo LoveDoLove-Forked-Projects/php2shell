@@ -4,7 +4,17 @@
   "title": "PHP2Shell build profile",
   "description": "Per-build profile with libphp offsets, heap calibration parameters and RCE verification status.",
   "type": "object",
-  "required": ["name", "php_version", "branch", "sapi", "rce", "libphp", "stages", "config"],
+  "required": [
+    "name",
+    "php_version",
+    "branch",
+    "sapi",
+    "arch",
+    "rce",
+    "libphp",
+    "stages",
+    "config"
+  ],
   "properties": {
     "name": {
       "type": "string",
@@ -22,12 +32,17 @@
       "description": "PHP release branch, e.g. 8.4."
     },
     "fixed_in": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "First patched version in this branch, or null for EOL branches."
     },
     "sapi": {
       "type": "string",
-      "enum": ["apache2handler"],
+      "enum": [
+        "apache2handler"
+      ],
       "description": "Server API. Only apache2handler (mod_php prefork) is supported."
     },
     "verified": {
@@ -40,7 +55,11 @@
     },
     "upstream_profile": {
       "type": "string",
-      "enum": ["bookworm", "bookworm-noexpose", "lab"],
+      "enum": [
+        "bookworm",
+        "bookworm-noexpose",
+        "lab"
+      ],
       "description": "Upstream exploit profile name passed to exploit.py."
     },
     "distro": {
@@ -49,13 +68,19 @@
     },
     "arch": {
       "type": "string",
-      "enum": ["aarch64", "amd64"],
+      "enum": [
+        "aarch64",
+        "amd64"
+      ],
       "description": "CPU architecture."
     },
     "libphp": {
       "type": "object",
       "description": "Symbol offsets relative to the libphp.so load base.",
-      "required": ["zif_system", "zval_ptr_dtor"],
+      "required": [
+        "zif_system",
+        "zval_ptr_dtor"
+      ],
       "properties": {
         "zif_system": {
           "type": "string",
@@ -68,7 +93,10 @@
           "description": "Offset of zval_ptr_dtor (the destructor the stage-3 hijack replaces)."
         },
         "htdata": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "pattern": "^0x[0-9a-fA-F]+$",
           "description": "Chunk-relative offset of the 167-byte live string used as stage-3 carrier. Null when stage 3 is not calibrated."
         }
@@ -100,17 +128,25 @@
           "description": "Value parameter for stage-2 calibration."
         },
         "stage3_pads": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "items": {
             "type": "array",
-            "items": { "type": "integer" },
+            "items": {
+              "type": "integer"
+            },
             "minItems": 2,
             "maxItems": 2
           },
           "description": "Padding pairs for stage-3 heap grooming. Null when stage 3 is not calibrated."
         },
         "stage3_carrier": {
-          "type": ["boolean", "null"],
+          "type": [
+            "boolean",
+            "null"
+          ],
           "description": "Whether the 167-byte carrier string is used. Null when stage 3 is not calibrated."
         }
       },
@@ -173,25 +209,53 @@
     },
     "memory_limit_tested_mb": {
       "type": "array",
-      "items": { "type": "integer", "minimum": 1 },
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
       "description": "memory_limit values (in MiB) where RCE was verified."
     }
   },
-  "if": { "properties": { "rce": { "const": true } } },
+  "if": {
+    "properties": {
+      "rce": {
+        "const": true
+      }
+    }
+  },
   "then": {
-    "required": ["oom_mb"],
+    "required": [
+      "oom_mb"
+    ],
     "properties": {
       "libphp": {
-        "required": ["zif_system", "zval_ptr_dtor", "htdata"],
+        "required": [
+          "zif_system",
+          "zval_ptr_dtor",
+          "htdata"
+        ],
         "properties": {
-          "htdata": { "type": "string" }
+          "htdata": {
+            "type": "string"
+          }
         }
       },
       "stages": {
-        "required": ["stage1_n", "stage1_forge_len", "stage2_t", "stage2_v", "stage3_pads", "stage3_carrier"],
+        "required": [
+          "stage1_n",
+          "stage1_forge_len",
+          "stage2_t",
+          "stage2_v",
+          "stage3_pads",
+          "stage3_carrier"
+        ],
         "properties": {
-          "stage3_pads": { "type": "array" },
-          "stage3_carrier": { "type": "boolean" }
+          "stage3_pads": {
+            "type": "array"
+          },
+          "stage3_carrier": {
+            "type": "boolean"
+          }
         }
       }
     }
