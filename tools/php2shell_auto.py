@@ -180,6 +180,11 @@ def load_profiles(directory: str):
     return profiles
 
 
+def remote_arch_required(remote: bool, arch: str | None, profile: str | None) -> bool:
+    """Remote targets cannot be fingerprinted for CPU architecture."""
+    return bool(remote and not arch and not profile)
+
+
 def select(profiles, version: str, branch: str, arch: str | None = None):
     def fits(profile):
         return arch is None or profile.get("arch") == arch
@@ -544,7 +549,7 @@ def main() -> int:
     ap.add_argument("--pin-max", type=int, default=32,
                     help="max keep-alive connections for remote auto-pinning")
     ap.add_argument("--arch", choices=("aarch64", "amd64"), default=None,
-                    help="select the CPU architecture; auto-detected for local containers")
+                    help="CPU architecture; required for remote targets, auto-detected locally")
     ap.add_argument("--profile", default=None,
                     help="force a profile by name/path substring (needed when a version has several builds)")
     ap.add_argument("--no-color", action="store_true")
@@ -594,6 +599,11 @@ def main() -> int:
         if detected_arch:
             args.arch = detected_arch
             ui.info(f"detected architecture: {detected_arch}")
+    if remote_arch_required(remote, args.arch, args.profile):
+        ui.crit("remote target: CPU architecture cannot be detected")
+        ui.info("pass --arch aarch64|amd64 (and --php-version if needed) or --profile NAME")
+        ui.result(False, "ARCH REQUIRED", "remote target without --arch/--profile")
+        return 3
 
     version, server, powered = fingerprint(args.target)
     if args.php_version:

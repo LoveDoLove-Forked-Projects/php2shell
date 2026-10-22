@@ -62,8 +62,8 @@ default retries because its stage 3 is probabilistic.
 - **Version-aware dispatch** — fingerprints the target, rejects fixed releases,
   selects the exact build profile and passes offsets, `htdata` and heap
   parameters explicitly. `--php-version` covers servers that hide their version;
-  `--arch` selects aarch64 or amd64 (auto-detected for local containers), and
-  `--profile` forces an exact build.
+  `--arch` selects aarch64 or amd64 (auto-detected for local containers,
+  required for remote targets), and `--profile` forces an exact build.
 - **Memory-limit probe** — one request reveals the target `memory_limit` from
   the fatal message; the chain then runs once instead of sweeping every value.
 - **Worker pinning** — keeps N-1 prefork workers busy with idle keep-alive
@@ -134,7 +134,7 @@ Useful entry points:
 ```sh
 python3 tools/php2shell_auto.py --list          # profiles and RCE status
 python3 tools/php2shell_auto.py -u <target> --dry-run --no-color
-python3 tools/php2shell_auto.py -u <target> --php-version 8.4.26 --allow-remote
+python3 tools/php2shell_auto.py -u <target> --php-version 8.4.26 --arch amd64 --allow-remote
 python3 tools/php2shell_labs.py status
 python3 tools/php2shell_inventory.py
 ```
@@ -177,9 +177,9 @@ offsets:
 
 - local container: the dispatcher reads `uname -m` and selects the matching
   profile automatically;
-- remote target: pass `--arch aarch64|amd64` (or `--profile NAME`). If the
-  version has several builds and no architecture is supplied, the dispatcher
-  refuses instead of guessing.
+- remote target: `--arch aarch64|amd64` (or `--profile NAME`) is **required**,
+  even when the version has a single profile. HTTP does not expose the CPU
+  architecture, so the dispatcher refuses instead of guessing.
 
 ## Configuration requirements
 

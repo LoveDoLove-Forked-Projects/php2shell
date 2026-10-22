@@ -133,6 +133,7 @@ profile that only leaks is stored with `rce: false`.
 | HTTPS stage 1 fails | use HTTP for the verified path; HTTPS is not end-to-end verified |
 | `no proof yet` | `/out` mount, writable webroot, served output path |
 | stage 1 fails on a multi-worker target | `--pin-workers N` (remote pinning is opt-in) |
+| `ARCH REQUIRED` on a remote target | pass `--arch aarch64|amd64` or `--profile NAME`; HTTP cannot reveal the CPU |
 | probe inconclusive | `--memory-limit-mb N` or `--no-probe` |
 | stage 3 fails | verify the exact build/profile; 8.4.25 needs retries |
 

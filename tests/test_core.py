@@ -60,6 +60,12 @@ class SelectionTests(unittest.TestCase):
     def test_none(self):
         self.assertEqual(auto.select([], "8.4.26", "8.4"), (None, "none"))
 
+    def test_remote_arch_required(self):
+        self.assertTrue(auto.remote_arch_required(True, None, None))
+        self.assertFalse(auto.remote_arch_required(True, "amd64", None))
+        self.assertFalse(auto.remote_arch_required(True, None, "p"))
+        self.assertFalse(auto.remote_arch_required(False, None, None))
+
     def test_select_by_arch(self):
         profiles = [
             {"name": "p-arm", "php_version": "8.5.11", "branch": "8.5", "arch": "aarch64"},
