@@ -83,7 +83,7 @@ Typical wall time is 7-15 seconds on a native host once the image is present.
 ## 5. Other verified builds
 
 ```sh
-# 8.5.11 arm64
+# 8.5.11 aarch64
 python3 tools/php2shell_auto.py -u http://127.0.0.1:8106/index.php --container p2s-lab-8511 --memory-limit-mb 8
 
 # 8.5.11 amd64 (separate offsets; --arch is auto-detected for local containers)
@@ -95,7 +95,7 @@ python3 tools/php2shell_auto.py -u http://127.0.0.1:<port>/index.php \
   --profile 8.4.25-bookworm-aarch64 --memory-limit-mb 8
 ```
 
-A version with several builds (8.5.11 arm64/amd64) needs `--profile`; the
+A version with several builds (8.5.11 aarch64/amd64) needs `--profile`; the
 offsets differ even though `htdata` is the same.
 
 ## 6. Calibration workflow
@@ -117,7 +117,7 @@ profile that only leaks is stored with `rce: false`.
 
 - **8.4.26**: amd64 image; on arm64 it runs under emulation. The profile is
   `php-8.4.26-bookworm-amd64`.
-- **8.5.11**: arm64 and amd64 have different offsets; use the matching profile.
+- **8.5.11**: aarch64 and amd64 have different offsets; use the matching profile.
 - **8.4.25**: stage 3 is probabilistic; run with the default retries.
 - **8.3.35 / 8.3.33**: stage 1-2 work; stage 3 is blocked by a live session
   reference, not a calibration error.

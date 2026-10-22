@@ -130,7 +130,7 @@ def image_arch(image: str) -> str:
     out = docker("run", "--rm", "--entrypoint", "uname", image, "-m", timeout=120)
     machine = out.stdout.strip().lower()
     if machine:
-        mapped = {"aarch64": "arm64", "arm64": "arm64",
+        mapped = {"aarch64": "aarch64", "arm64": "aarch64",
                   "x86_64": "amd64", "amd64": "amd64"}.get(machine)
         if mapped:
             return mapped
@@ -138,7 +138,7 @@ def image_arch(image: str) -> str:
     arch = out.stdout.strip()
     if not arch or arch == "unknown":
         machine = platform.machine().lower()
-        arch = {"aarch64": "arm64", "arm64": "arm64", "x86_64": "amd64"}.get(machine, machine)
+        arch = {"aarch64": "aarch64", "arm64": "aarch64", "x86_64": "amd64"}.get(machine, machine)
     return arch
 
 

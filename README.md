@@ -31,20 +31,20 @@ not match the profile.
 
 | Build | Image | Profile | Heap leak | libphp leak | RCE | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| PHP 8.5.11 arm64 | `php:8.5.11-apache` (linux/arm64) | `php-8.5.11-bookworm-aarch64` | yes | yes | **yes** | `uid=33(www-data)` |
-| PHP 8.5.11 amd64 | `php:8.5.11-apache` (linux/amd64) | `php-8.5.11-bookworm-amd64` | yes | yes | **yes** | separate offsets, same `htdata` |
-| PHP 8.5.10 arm64 | `php:8.5.10-apache` | `php-8.5.10-bookworm-aarch64` | yes | yes | **yes** | `uid=33(www-data)` |
+| PHP 8.5.11 aarch64 | `php:8.5.11-apache` | `php-8.5.11-bookworm-aarch64` | yes | yes | **yes** | `uid=33(www-data)` |
+| PHP 8.5.11 amd64 | `php:8.5.11-apache` | `php-8.5.11-bookworm-amd64` | yes | yes | **yes** | separate offsets, same `htdata` |
+| PHP 8.5.10 aarch64 | `php:8.5.10-apache` | `php-8.5.10-bookworm-aarch64` | yes | yes | **yes** | `uid=33(www-data)` |
 | PHP 8.4.26 amd64 | `php:8.4.26-apache` | `php-8.4.26-bookworm-amd64` | yes | yes | **yes** | reference build |
-| PHP 8.4.25 arm64 | `php:8.4.25-apache` | `php-8.4.25-bookworm-aarch64` | yes | yes | **yes** | probabilistic stage 3; retries |
-| PHP 8.5.0 arm64 | `php:8.5.0-apache` | `php-8.5.0-bookworm` | yes | yes | no | stage-3 layout not found |
-| PHP 8.3.35 arm64 | `php:8.3.35-apache` | `php-8.3.35-bookworm-aarch64` | yes | yes | no | stage-3 reference alive |
+| PHP 8.4.25 aarch64 | `php:8.4.25-apache` | `php-8.4.25-bookworm-aarch64` | yes | yes | **yes** | probabilistic stage 3; retries |
+| PHP 8.5.0 aarch64 | `php:8.5.0-apache` | `php-8.5.0-bookworm` | yes | yes | no | stage-3 layout not found |
+| PHP 8.3.35 aarch64 | `php:8.3.35-apache` | `php-8.3.35-bookworm-aarch64` | yes | yes | no | stage-3 reference alive |
 | PHP 8.3.33 mod_php | `wordpress:7.1.1-apache` | `php-8.3.33-wordpress-mod_php` | yes | yes | no | stage-3 reference alive |
-| PHP 8.3.0 arm64 | `php:8.3.0-apache` | `php-8.3.0-bookworm` | no | no | no | `PS(id)` dangling; cookie not reclaimed |
-| PHP 8.2.34 arm64 | `php:8.2.34-apache` | `php-8.2.34-bookworm-aarch64` | no | no | no | UAF; leak shape differs |
-| PHP 8.1.34 arm64 | `php:8.1-apache` | `php-8.1.34-bookworm-aarch64` | no | no | no | UAF; leak shape differs |
-| PHP 8.0.30 arm64 | `php:8.0-apache` | `php-8.0.30-bookworm-aarch64` | no | no | no | UAF; leak shape differs |
-| PHP 7.4.33 arm64 | `php:7.4-apache` | `php-7.4.33-bookworm-aarch64` | no | no | no | UAF; leak shape differs |
-| PHP 8.2.0 arm64 | `php:8.2.0-apache` | — (offsets only) | n/a | n/a | no | no heap profile |
+| PHP 8.3.0 aarch64 | `php:8.3.0-apache` | `php-8.3.0-bookworm` | no | no | no | `PS(id)` dangling; cookie not reclaimed |
+| PHP 8.2.34 aarch64 | `php:8.2.34-apache` | `php-8.2.34-bookworm-aarch64` | no | no | no | UAF; leak shape differs |
+| PHP 8.1.34 aarch64 | `php:8.1-apache` | `php-8.1.34-bookworm-aarch64` | no | no | no | UAF; leak shape differs |
+| PHP 8.0.30 aarch64 | `php:8.0-apache` | `php-8.0.30-bookworm-aarch64` | no | no | no | UAF; leak shape differs |
+| PHP 7.4.33 aarch64 | `php:7.4-apache` | `php-7.4.33-bookworm-aarch64` | no | no | no | UAF; leak shape differs |
+| PHP 8.2.0 aarch64 | `php:8.2.0-apache` | — (offsets only) | n/a | n/a | no | no heap profile |
 
 **13 heap profiles, 5 with verified RCE. Offsets extracted for 12 builds.**
 
@@ -172,7 +172,7 @@ A profile is per build:
 
 ## Architecture selection
 
-Some versions ship more than one build. PHP 8.5.11 has separate arm64 and amd64
+Some versions ship more than one build. PHP 8.5.11 has separate aarch64 and amd64
 offsets:
 
 - local container: the dispatcher reads `uname -m` and selects the matching

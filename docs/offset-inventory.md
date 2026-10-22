@@ -5,18 +5,18 @@ a build still needs heap calibration before the chain can run.
 
 | Image | PHP | Arch | `zif_system` | `zval_ptr_dtor` | libphp sha256 | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| php:7.4-apache | 7.4.33 | arm64 | 0x309640 | 0x3f6024 | 4cb16c7db838 | offsets extracted; heap not calibrated |
-| php:8.0-apache | 8.0.30 | arm64 | 0x31ef70 | 0x40ddb0 | 35d769430309 | offsets extracted; heap not calibrated |
-| php:8.1-apache | 8.1.34 | arm64 | 0x341e08 | 0x42e7a0 | f7640ea4ad0a | offsets extracted; heap not calibrated |
-| php:8.2.0-apache | 8.2.0 | arm64 | 0x364f30 | 0x4520c0 | 322c858efd29 | offsets extracted; heap not calibrated |
-| php:8.2.34-apache | 8.2.34 | arm64 | 0x36ff48 | 0x4606c0 | db406c7f48eb | offsets extracted; heap not calibrated |
-| php:8.3.0-apache | 8.3.0 | arm64 | 0x3771f0 | 0x467cf0 | c1b72099fc8c | offsets extracted; heap not calibrated |
-| php:8.3.35-apache | 8.3.35 | arm64 | 0x377428 | 0x46fcc0 | 1f2bc20742e6 | offsets extracted; heap not calibrated |
-| php:8.4.25-apache | 8.4.25 | arm64 | 0x42fa30 | 0x637ae0 | 2d2388a4b0af | offsets extracted; heap not calibrated |
+| php:7.4-apache | 7.4.33 | aarch64 | 0x309640 | 0x3f6024 | 4cb16c7db838 | offsets extracted; heap not calibrated |
+| php:8.0-apache | 8.0.30 | aarch64 | 0x31ef70 | 0x40ddb0 | 35d769430309 | offsets extracted; heap not calibrated |
+| php:8.1-apache | 8.1.34 | aarch64 | 0x341e08 | 0x42e7a0 | f7640ea4ad0a | offsets extracted; heap not calibrated |
+| php:8.2.0-apache | 8.2.0 | aarch64 | 0x364f30 | 0x4520c0 | 322c858efd29 | offsets extracted; heap not calibrated |
+| php:8.2.34-apache | 8.2.34 | aarch64 | 0x36ff48 | 0x4606c0 | db406c7f48eb | offsets extracted; heap not calibrated |
+| php:8.3.0-apache | 8.3.0 | aarch64 | 0x3771f0 | 0x467cf0 | c1b72099fc8c | offsets extracted; heap not calibrated |
+| php:8.3.35-apache | 8.3.35 | aarch64 | 0x377428 | 0x46fcc0 | 1f2bc20742e6 | offsets extracted; heap not calibrated |
+| php:8.4.25-apache | 8.4.25 | aarch64 | 0x42fa30 | 0x637ae0 | 2d2388a4b0af | offsets extracted; heap not calibrated |
 | php:8.4.26-apache | 8.4.26 | amd64 | 0x465370 | 0x65eb60 | 51663cf883b1 | offsets extracted; heap not calibrated |
-| php:8.5.0-apache | 8.5.0 | arm64 | 0x503510 | 0x731d80 | 5910f3f12fbd | offsets extracted; heap not calibrated |
-| php:8.5.10-apache | 8.5.10 | arm64 | 0x52e130 | 0x75d360 | 5f080d44d3f8 | offsets extracted; heap not calibrated |
-| php:8.5.11-apache | 8.5.11 | arm64 | 0x5314f0 | 0x761b80 | 64a617aeb392 | offsets extracted; heap not calibrated |
+| php:8.5.0-apache | 8.5.0 | aarch64 | 0x503510 | 0x731d80 | 5910f3f12fbd | offsets extracted; heap not calibrated |
+| php:8.5.10-apache | 8.5.10 | aarch64 | 0x52e130 | 0x75d360 | 5f080d44d3f8 | offsets extracted; heap not calibrated |
+| php:8.5.11-apache | 8.5.11 | aarch64 | 0x5314f0 | 0x761b80 | 64a617aeb392 | offsets extracted; heap not calibrated |
 
 ## Notes
 

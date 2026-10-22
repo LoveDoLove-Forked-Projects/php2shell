@@ -5,8 +5,8 @@
 | Layer | Coverage |
 | --- | --- |
 | Offset inventory | 12 builds: 7.4.33, 8.0.30, 8.1.34, 8.2.0, 8.2.34, 8.3.0, 8.3.35, 8.4.25, 8.4.26, 8.5.0, 8.5.10, 8.5.11 |
-| Heap profiles | 8.3.33, 8.3.35 (leaks); 8.4.25, 8.4.26, 8.5.10, 8.5.11 arm64/amd64 (RCE); 7.4/8.0/8.1/8.2 (offsets only) |
-| Verified RCE | 8.4.25 arm64, 8.4.26 amd64, 8.5.10 arm64, 8.5.11 arm64, 8.5.11 amd64 |
+| Heap profiles | 8.3.33, 8.3.35 (leaks); 8.4.25, 8.4.26, 8.5.10, 8.5.11 aarch64/amd64 (RCE); 7.4/8.0/8.1/8.2 (offsets only) |
+| Verified RCE | 8.4.25 aarch64, 8.4.26 amd64, 8.5.10 aarch64, 8.5.11 aarch64, 8.5.11 amd64 |
 | Labs | `:8100`-`:8106`, one per build |
 | Catalog | all vulnerable branches 5.4 → 8.5, plus 8.6 RC |
 

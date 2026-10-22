@@ -171,6 +171,11 @@ class InventoryTests(unittest.TestCase):
             self.assertEqual(data.get("type"), "object")
             self.assertIn("arch", data.get("required", []))
 
+    def test_offset_arch_metadata(self):
+        for path in sorted((ROOT / "profiles" / "offsets").glob("*.json")):
+            data = json.loads(path.read_text())
+            self.assertIn(data.get("arch"), ("aarch64", "amd64"), path)
+
     def test_catalog_structure(self):
         catalog = json.loads((ROOT / "catalog" / "vulnerable.json").read_text())
         branches = catalog.get("branches")
